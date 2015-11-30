@@ -1,12 +1,9 @@
 === Default Post Date ===
-Contributors: ipm-frommen
-Donate link: http://ipm-frommen.de/wordpress
-Tags: post, posts, date, bulk, publish
+Contributors: tfrommen
+Tags: bulk, date, post, posts, publish
 Requires at least: 2.9.0
-Tested up to: 4.3
+Tested up to: 4.4
 Stable tag: trunk
-License: GPLv3
-License URI: http://www.gnu.org/licenses/gpl-3.0.html
 
 Define an individual default post date that is to be used when adding a new post.
 
@@ -34,13 +31,27 @@ This plugin requires PHP 5.3.
 
 1. Upload the `default-post-date` folder to the `/wp-content/plugins/` directory on your web server.
 1. Activate the plugin through the _Plugins_ menu in WordPress.
-1. Find the new _Default Post Date_ setting on the _General Settings_ page in your WordPress backend.
+1. Find the new _Default Post Date_ setting on the _Writing Settings_ page in your WordPress backend.
 
 == Screenshots ==
 
 1. **Setting** - Here you can define the default post date.
 
 == Changelog ==
+
+= 1.5.0 =
+* Complete refactor.
+* Use composer autoloader.
+* Refactor tests.
+* Compatible up to WordPress 4.4.
+
+= 1.4.1 =
+* Move settings field to Writing Settings.
+* Rename plugin option.
+
+= 1.4.0 =
+* Change namespace root to 'tfrommen'.
+* Compatible up to WordPress 4.3.1.
 
 = 1.3.2 =
 * Code styling and house cleaning.

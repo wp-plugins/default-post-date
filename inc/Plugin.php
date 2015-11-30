@@ -1,11 +1,11 @@
 <?php # -*- coding: utf-8 -*-
 
-namespace tf\DefaultPostDate;
+namespace tfrommen\DefaultPostDate;
 
 /**
- * Class Plugin
+ * Main controller.
  *
- * @package tf\DefaultPostDate
+ * @package tfrommen\DefaultPostDate
  */
 class Plugin {
 
@@ -15,33 +15,57 @@ class Plugin {
 	private $file;
 
 	/**
-	 * Constructor. Set up the properties.
+	 * @var string[]
+	 */
+	private $plugin_data;
+
+	/**
+	 * Constructor. Sets up the properties.
 	 *
 	 * @param string $file Main plugin file.
 	 */
 	public function __construct( $file ) {
 
 		$this->file = $file;
+
+		$this->plugin_data = get_file_data( $file, array(
+			'version'     => 'Version',
+			'text_domain' => 'Text Domain',
+			'domain_path' => 'Domain Path',
+		) );
 	}
 
 	/**
-	 * Initialize the plugin.
+	 * Initializes the plugin.
 	 *
 	 * @return void
 	 */
 	public function initialize() {
 
-		$text_domain = new Models\TextDomain( $this->file );
+		$option = new Setting\Option();
+
+		$updater = new Update\Updater( $this->plugin_data['version'] );
+		$updater->update();
+
+		$text_domain = new L10n\TextDomain( $this->plugin_data, $this->file );
 		$text_domain->load();
 
-		$settings = new Models\Settings();
-		$settings_field_view = new Views\SettingsField( $settings );
-		$settings_controller = new Controllers\Settings( $settings, $settings_field_view );
-		$settings_controller->initialize();
+		$setting_controller = new Setting\Controller(
+			new Setting\Setting(
+				$option,
+				new Setting\Sanitizer()
+			)
+		);
+		$setting_controller->initialize();
 
-		$script = new Views\Script( $settings );
-		$script_controller = new Controllers\Script( $script );
-		$script_controller->initialize();
+		$settings_field_controller = new SettingsField\Controller(
+			new SettingsField\View( $option )
+		);
+		$settings_field_controller->initialize();
+
+		$asset_controller = new Asset\Controller(
+			new Asset\Script( $this->file, $option )
+		);
+		$asset_controller->initialize();
 	}
-
 }
